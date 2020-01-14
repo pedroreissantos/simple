@@ -11,6 +11,9 @@ static int sameVar(NODEPTR_TYPE p) {
   return strcmp(LEFT_CHILD(p)->value.s, LEFT_CHILD(RIGHT_CHILD(p))->value.s) ? 0x7fff : 2;
 }
 
+#define TRACE
+static void yytrace(NODEPTR_TYPE p, int eruleno, int cost, int bestcost);
+
 extern FILE *yyout;
 extern int lbl;
 extern char *mklbl(int n);
@@ -66,8 +69,8 @@ stat:	ASSIGN(VARIABLE,ADD(VARIABLE,INTEGER))	sameVar {
 	}
 %%
 #include "y.tab.h"
-
 extern char **yynames;
+extern int trace, errors;
 
 static int data(int t, char *s, void *a, void *user) {
   if (s) fprintf(yyout, pfLABEL pfINTEGER, s, 0);
@@ -75,14 +78,25 @@ static int data(int t, char *s, void *a, void *user) {
 }
 
 void evaluate(Node *p) {
-  extern int trace, errors;
-
   if (errors) return;
   if (trace) printNode(p, stdout, yynames);
   fprintf(yyout, pfTEXT pfALIGN pfGLOBL pfLABEL, "_main", pfFUNC, "_main");
   yyselect(p);
-  fprintf(yyout, pfRET pfDATA);
+  fprintf(yyout, pfIMM pfPOP pfRET pfDATA, 0);
   IDevery(data,0);
   fprintf(yyout, pfEXTRN pfEXTRN pfEXTRN pfEXTRN,
   		"_prints", "_printi", "_println", "_readi");
 }
+
+#ifndef NOTRACE
+static void yytrace(NODEPTR_TYPE p, int eruleno, int cost, int bestcost)
+{
+	int op = OP_LABEL(p);
+	YYCONST char *tname = yytermname[op] ? yytermname[op] : "?";
+	if (trace) fprintf(stderr, "0x%lx:%s matched %s with cost %d vs. %d\n", (long)p, tname, yystring[eruleno], cost, bestcost);
+	if (cost >= MAX_COST && bestcost >= MAX_COST) {
+		fprintf(stderr, "0x%lx:%s NO MATCH %s with cost %d vs. %d\n", (long)p, tname, yystring[eruleno], cost, bestcost);
+		printNode(p, stderr, yynames);
+	}
+}
+#endif

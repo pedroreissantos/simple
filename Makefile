@@ -20,6 +20,9 @@ $(LANG): gram.y scan.l code.brg
 examples:: $(LANG)
 	make -C $(EXS)
 
+run:: $(LANG)
+	make -C $(EXS) run
+
 clean::
 	make -C $(LIB) clean
 	make -C $(RUN) clean

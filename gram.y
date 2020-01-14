@@ -6,6 +6,7 @@
 #include "node.h"
 #include "tabid.h"
 
+int yylex();
 void evaluate(Node *p);
 void yyerror(char *s);
 int lbl;

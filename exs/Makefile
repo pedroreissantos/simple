@@ -10,7 +10,7 @@ all::
 	for i in $(ALL:%.spl=%); do $(MAKE) $(MFLAGS) $$i; done
 
 run::
-	for i in $(ALL:%.spl=%.out); do $(MAKE) $(MFLAGS) $$i; done
+	for i in $(ALL:%.spl=%.run); do $(MAKE) $(MFLAGS) $$i; done
 
 $(EXT).o:
 	$(EXE) $< $*.asm
@@ -24,31 +24,31 @@ $(EXT).o:
 clean::
 	rm -f *.asm *.o $(ALL:%.spl=%)
 
-div.out: div
+div.run: div
 	echo 144 | ./div
-ex2.out: ex2
+ex2.run: ex2
 	./ex2
-ex3.out: ex3
+ex3.run: ex3
 	./ex3
-ex4.out: ex4
+ex4.run: ex4
 	./ex4 < ex4.in
-ex5.out: ex5
+ex5.run: ex5
 	echo 12 | ./ex5
-ex6.out: ex6
+ex6.run: ex6
 	echo 21 | ./ex6
-ex.out: ex
+ex.run: ex
 	./ex
-fib.out: fib
+fib.run: fib
 	echo 12 | ./fib
-gcd.out: gcd
+gcd.run: gcd
 	./gcd < ./gcd.in
-prio.out: prio
+prio.run: prio
 	./prio
-hello.out: hello
+hello.run: hello
 	./hello
-printi.out: printi
+printi.run: printi
 	./printi
-tri.out: tri
+tri.run: tri
 	./tri < ./tri.in
-x.out: x
+x.run: x
 	./x
