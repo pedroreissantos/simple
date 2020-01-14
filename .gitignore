@@ -1,0 +1,10 @@
+y.tab.c
+y.tab.h
+y.output
+lex.yy.c
+*.o
+*.a
+a.out
+yyselect.c
+.*.swp
+core
