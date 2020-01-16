@@ -11,7 +11,7 @@ CFLAGS=-g -DYYDEBUG
 $(LANG): gram.y scan.l code.brg
 	make -C $(LIB)
 	byacc -dv gram.y
-	flex -l scan.l
+	flex -dl scan.l
 	pburg -T code.brg
 	$(LINK.c) -o $(LANG) $(ARCH) -I$(LIB) lex.yy.c y.tab.c yyselect.c -L$(LIB) -l$(UTIL)
 	make -C $(RUN)
