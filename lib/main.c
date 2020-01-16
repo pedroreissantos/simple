@@ -10,7 +10,6 @@
 char *ext = ".asm", *prog, *infile = "<<stdin>>", *outfile = "out.asm";
 int errors, trace, initial, yyparse(void);
 extern FILE *yyout;
-extern int IDdebug;
 
 int yyerror(char *s)
 {
@@ -32,17 +31,20 @@ char *dupstr(const char *s)
 }
 
 int main(int argc, char *argv[]) {
+  extern int IDdebug, debugNode, infoNode, placeNode;
   extern int yy_flex_debug;
 #ifdef YYDEBUG
   extern int yydebug;
   yydebug = getenv("YYDEBUG") ? 1 : 0;
 #endif
   yy_flex_debug = getenv("LEXDBUG") ? 1 : 0;
+  IDdebug = getenv("IDDEBUG") ? 1 : 0;
+  debugNode = infoNode = placeNode = getenv("NODEDBUG") ? 1 : 0;
 
   prog = argv[0];
 
   if (argc > 1 && strcmp(argv[1], "-initial") == 0) { initial = 1; argc--; argv++; ext = ".out"; outfile = "out.out"; }
-  if (argc > 1 && strcmp(argv[1], "-trace") == 0) { IDdebug = trace = 1; argc--; argv++; }
+  if (argc > 1 && strcmp(argv[1], "-trace") == 0) { trace = 1; argc--; argv++; }
   if (argc > 3) {
     fprintf(stderr, "USAGE: %s [-initial] [-trace] [infile [outfile]]\n",
 	    argv[0]);
