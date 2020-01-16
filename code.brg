@@ -81,7 +81,7 @@ void evaluate(Node *p) {
   if (errors) return;
   if (trace) printNode(p, stdout, yynames);
   fprintf(yyout, pfTEXT pfALIGN pfGLOBL pfLABEL, "_main", pfFUNC, "_main");
-  yyselect(p);
+  if (!yyselect(p) && trace) fprintf(stderr, "selection successful\n");
   fprintf(yyout, pfIMM pfPOP pfRET pfDATA, 0);
   IDevery(data,0);
   fprintf(yyout, pfEXTRN pfEXTRN pfEXTRN pfEXTRN,
