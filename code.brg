@@ -21,7 +21,7 @@ extern char *mklbl(int n);
 %term LIST=';' ASSIGN='=' ADD='+' SUB='-' MUL='*' DIV='/' MOD='%' LT='<' GT='>'
 %include "y.tab.h"
 %%
-stat:	LIST(stat,stat)
+stat:	LIST(stat,stat)	0 { char s[20]; sprintf(s, "line %d", p->line); fprintf(yyout, pfCOMM, s); }
 stat:	STRING		9 { char *l = mklbl(++lbl);
 			    fprintf(yyout, pfRODATA pfALIGN pfLABEL pfSTR
 				pfTEXT pfADDR pfCALL pfCALL pfTRASH,
