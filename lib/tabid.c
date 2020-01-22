@@ -103,6 +103,23 @@ int IDreplace(int typ, char *s, void *attrib) {
   return -1;
 }
 
+int IDchange(int typ, char *s, void *attrib, int skip) {
+  struct id *aux = root;
+
+  if (skip > level) skip = level;
+  while (skip-- > 0) { /* skip the first 'skip' levels */
+    while (aux->name != 0) aux = aux->next;
+    aux = aux->next;
+  }
+  for (; aux != 0; aux = aux->next)
+    if (aux->name != 0 && strcmp(aux->name, s) == 0) {
+      aux->type = typ;
+      aux->attrib = attrib;
+      return 1;
+    }
+  return -1;
+}
+
 /* find an ID, return:
    -1 - if no ID can be found in any visible bucket up to the root
    type - there is an accessible ID previously defined

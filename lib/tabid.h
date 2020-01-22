@@ -10,6 +10,7 @@ void	IDpop(void),
 	IDprint(int,int);
 int	IDnew(int,char*,void*),
 	IDreplace(int,char*,void*),
+	IDchange(int,char*,void*,int),
 	IDinsert(int,int,char*,void*),
 	IDfind(char*,void**),
 	IDsearch(char*,void**,int,int),
