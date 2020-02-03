@@ -1,6 +1,8 @@
 EXT=.spl
 EXE=../simple
 LIB=../libsimple.a
+AS=nasm -felf32
+LD=ld -m elf_i386
 
 .SUFFIXES: .asm $(EXT)
 
@@ -14,12 +16,12 @@ run::
 
 $(EXT).o:
 	$(EXE) $< $*.asm
-	nasm -felf32 $*.asm
-	
+	$(AS) $*.asm
+
 %: %$(EXT)
 	$(EXE) $< $*.asm
-	nasm -felf32 $*.asm
-	ld -m elf_i386 -o $@ $*.o $(LIB)
+	$(AS) $*.asm
+	$(LD) -o $@ $*.o $(LIB)
 
 clean::
 	rm -f *.asm *.o $(ALL:%.spl=%)

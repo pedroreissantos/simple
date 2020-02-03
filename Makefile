@@ -6,7 +6,11 @@ RUN=run# runtime directory
 EXS=exs# examples directory
 CC=gcc
 CFLAGS=-g -DYYDEBUG
+LDLIBS=run/lib$(LANG).a
+AS=nasm -felf32
+LD=ld -m elf_i386
 
+.SUFFIXES: .asm $(EXT)
 
 $(LANG): gram.y scan.l code.brg
 	make -C $(LIB)
@@ -22,6 +26,10 @@ examples:: $(LANG)
 
 run:: $(LANG)
 	make -C $(EXS) run
+
+%: %.asm
+	$(AS) $*.asm
+	$(LD) -o $@ $*.o $(LDLIBS)
 
 clean::
 	make -C $(LIB) clean

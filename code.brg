@@ -70,7 +70,7 @@ stat:	ASSIGN(VARIABLE,ADD(VARIABLE,INTEGER))	sameVar {
 %%
 #include "y.tab.h"
 extern char **yynames;
-extern int trace, errors;, debugNode
+extern int trace, errors, debugNode;
 
 static int data(int t, char *s, void *a, void *user) {
   if (s) fprintf(yyout, pfLABEL pfINTEGER, s, 0);
