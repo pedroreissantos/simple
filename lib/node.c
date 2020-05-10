@@ -1,4 +1,5 @@
 /* $Id: node.c,v 1.1 2014/02/13 12:28:19 prs Exp $ */
+/* (C)Pedro Reis dos Santos, 2004-2020 */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -264,7 +265,7 @@ static int print(Node *p, FILE *fp, char *tab[], int lev) {
     if (p == 0) return cnt;
     cnt++;
     if (p->type == nodeOpr) fprintf(fp,"\n%*s(", 2*lev, " ");
-    if (debugNode) fprintf(fp," [%lx]", (long)p);
+    if (debugNode) fprintf(fp," [%p]", p);
     if (infoNode) fprintf(fp," {%d}", p->info);
     if (placeNode) fprintf(fp," <%ld>", p->place);
     if (tab != 0)
@@ -282,7 +283,7 @@ static int print(Node *p, FILE *fp, char *tab[], int lev) {
 	      fprintf(fp,"%2.2X", ((unsigned char*)p->value.d.data)[i]);
 	    fprintf(fp,"]");
 	    break;
-	case nodeOpr: 
+	case nodeOpr:
 	    for (i = 0; i < p->value.sub.num; i++)
 		cnt += print(p->value.sub.n[i], fp, tab, lev+1);
 	    fprintf(fp,")");
@@ -347,7 +348,7 @@ void pathNode(Node *p, FILE *fp, char *tab[], char *base) {
 	      fprintf(fp,"%2.2X", ((unsigned char*)p->value.d.data)[i]);
 	    fprintf(fp,"]\n");
 	    break;
-	case nodeOpr: 
+	case nodeOpr:
 	    for (i = 0; i < p->value.sub.num; i++)
 		pathNode(p->value.sub.n[i], fp, tab, name);
 	    break;
