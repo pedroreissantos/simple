@@ -11,50 +11,35 @@ program	# classificador de triângulos
   print 'introduza as dimensões do terceiro lado do triângulo: ';
   read c;
 
-  if (a < 1) {		# face de comprimento não positivo
+  if (a < 1)		# face de comprimento não positivo
     print 'As dimensões dos lados do triângulo devem ser positivas';
-  }
-  else {
-    if (b < 1) {
+  else
+    if (b < 1)
       print 'As dimensões dos lados do triângulo devem ser positivas';
-    }
-    else {
-      if (c < 1) {
+    else
+      if (c < 1)
 	print 'As dimensões dos lados do triângulo devem ser positivas';
-      }
-      else {
-	if (a + b <= c) {
+      else
+	if (a + b <= c)
 	  print 'Não e um triângulo';
-	}
-	else {
-	  if (a + c <= b) {
+	else
+	  if (a + c <= b)
 	    print 'Não e um triângulo';
-	  }
-	  else {
-	    if (c + b <= a) {
+	  else
+	    if (c + b <= a)
 	      print 'Não e um triângulo';
-	    }
-	    else {
-	      if (a == b) {
-		if (b == c) {
+	    else
+	      if (a == b)
+		if (b == c)
 		  print 'Triângulo equilátero';
-		}
-		else {
+		else
 		  print 'Triângulo isósceles';
-		}
-	      }
-	      else {
-		if (b == c) {
+	      else
+		if (b == c)
 		  print 'Triângulo isósceles';
-		}
-		else {
-		  print 'Triângulo escaleno';
-		}
-	      }
-	    }
-	  }
-	}
-      }
-    }
-  }
+		else
+		  if (a == c)
+		    print 'Triângulo isósceles';
+		  else
+		    print 'Triângulo escaleno';
 end

@@ -16,11 +16,11 @@ run::
 
 $(EXT).o:
 	$(EXE) $< $*.asm
-	$(AS) $*.asm
+	$(AS) $*.asm -o $@
 
 %: %$(EXT)
 	$(EXE) $< $*.asm
-	$(AS) $*.asm
+	$(AS) $*.asm -o $*.o
 	$(LD) -o $@ $*.o $(LIB)
 
 clean::

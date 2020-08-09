@@ -28,7 +28,7 @@ run:: $(LANG)
 	make -C $(EXS) run
 
 %: %.asm
-	$(AS) $*.asm
+	$(AS) $*.asm -o $*.o
 	$(LD) -o $@ $*.o $(LDLIBS)
 
 clean::

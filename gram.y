@@ -6,10 +6,8 @@
 #include "node.h"
 #include "tabid.h"
 
-int yylex();
-void evaluate(Node *p);
-void yyerror(char *s);
-int lbl;
+int yylex(), yyparse();
+void evaluate(Node *p), yyerror(char *s);
 %}
 
 %union {
@@ -31,7 +29,7 @@ int lbl;
 
 %type <n> stmt expr list
 
-%token LABEL JMP JZ JNZ ETIQ
+%token DO START
 
 %%
 
@@ -44,32 +42,9 @@ stmt	: ';'				  { $$ = 0; }
 	| READ VARIABLE ';'		  { if (IDfind($2, 0) < 0) $$ = 0; else $$ = strNode(READ, $2); }
 	| VARIABLE '=' expr ';'		  { IDnew(0, $1, (void*)IDtest);
 					    $$ = binNode('=', strNode(VARIABLE, $1), $3); }
-	| WHILE '(' expr ')' stmt	  { int lbl1 = ++lbl, lbl2 = ++lbl;
-					    $$ = seqNode(';', 5,
-							strNode(JMP, mklbl(lbl1)),
-							strNode(LABEL, mklbl(lbl2)),
-							$5 /* instr */,
-							strNode(LABEL, mklbl(lbl1)),
-							binNode(JNZ, $3 /* cond */,
-								strNode(ETIQ, mklbl(lbl2))));
-					  }
-	| IF '(' expr ')' stmt %prec IFX  { int lbl1 = ++lbl;
-					    $$ = seqNode(';', 3,
-							binNode(JZ, $3 /* cond */,
-								strNode(ETIQ, mklbl(lbl1))),
-							$5 /* instr */,
-							strNode(LABEL, mklbl(lbl1)));
-					  }
-	| IF '(' expr ')' stmt ELSE stmt  { int lbl1 = ++lbl, lbl2 = ++lbl;
-					    $$ = seqNode(';', 6,
-							binNode(JZ, $3 /* cond */,
-								strNode(ETIQ, mklbl(lbl1))),
-							$5 /* instr */,
-							strNode(JMP, mklbl(lbl2)),
-							strNode(LABEL, mklbl(lbl1)),
-							$7 /* else */,
-							strNode(LABEL, mklbl(lbl2)));
-					  }
+	| WHILE '(' expr ')' stmt	  { $$ = binNode(WHILE, binNode(DO, nilNode(START), $3), $5); }
+	| IF '(' expr ')' stmt %prec IFX  { $$ = binNode(IF, $3, $5); }
+	| IF '(' expr ')' stmt ELSE stmt  { $$ = binNode(ELSE, binNode(IF, $3, $5), $7); }
 	| '{' list '}'			  { $$ = $2; }
 	;
 
@@ -95,13 +70,6 @@ expr	: INTEGER			  { $$ = intNode(INTEGER, $1); }
 	;
 
 %%
-
-char *mklbl(int n) {
-  static char buf[20];
-  sprintf(buf, "_i%d", n);
-  return strdup(buf);
-}
-
 char **yynames =
 #if YYDEBUG > 0
 		 (char**)yyname;
